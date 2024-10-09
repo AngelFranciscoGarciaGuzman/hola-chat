@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "161663548046",
+    "project_id": "my-chat-omg",
+    "storage_bucket": "my-chat-omg.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:161663548046:android:bf51cd3a3126558ddf67df",
+        "android_client_info": {
+          "package_name": "com.example.hola_chat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgaFEAlYbM-YtHiInO99K7XqdiCdge8eg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
