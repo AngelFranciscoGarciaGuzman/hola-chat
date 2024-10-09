@@ -1,27 +1,22 @@
 package com.example.hola_chat
 
+import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.Gravity
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
-
 
 class MainActivity : AppCompatActivity() {
-    // Create the Variables for the inputs.
+    // Crear variables para las entradas de usuario.
     lateinit var emailInput: EditText
     lateinit var passwordInput: EditText
     lateinit var loginButton: Button
-    private lateinit var auth: FirebaseAuth;
-
+    lateinit var signUpButton: Button
+    private lateinit var auth: FirebaseAuth
 
     public override fun onStart() {
         super.onStart()
@@ -30,53 +25,86 @@ class MainActivity : AppCompatActivity() {
             reload()
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        auth = Firebase.auth
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_login)
 
+        // Inicializar FirebaseAuth
+        auth = FirebaseAuth.getInstance()
 
-
-// Assign the inputs to the variables.
+        // Asignar las vistas a las variables
         emailInput = findViewById(R.id.user_email_input)
         passwordInput = findViewById(R.id.user_password_input)
         loginButton = findViewById(R.id.login_button)
+        signUpButton = findViewById(R.id.sign_up_button)
+
+        // Lógica para iniciar sesión
         loginButton.setOnClickListener {
-// Get the email and password from the inputs.
             val email = emailInput.text.toString()
             val password = passwordInput.text.toString()
-// Print the email and password.
-            println("Email: $email")
-            println("Password: $password")
-            Log.i("Test Credentials", "Email: $email and Password:$password")
-            signUp(email, password)
+
+            // Verificar si los campos no están vacíos
+            if (email.isNotEmpty() && password.isNotEmpty()) {
+                signIn(email, password)
+            } else {
+                showError("Por favor, ingrese su correo y contraseña")
+            }
+        }
+
+        // Lógica para registrarse
+        signUpButton.setOnClickListener {
+            val email = emailInput.text.toString()
+            val password = passwordInput.text.toString()
+
+            if (email.isNotEmpty() && password.isNotEmpty()) {
+                signUp(email, password)
+            } else {
+                showError("Por favor, ingrese su correo y contraseña")
+            }
         }
     }
-    // Function to validate email format
-    private fun isValidEmail(email: String): Boolean {
-        val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
-        return email.matches(emailPattern.toRegex())
-    }
-    // Function to show error message in a notification banner
-    private fun showError(message: String) {
-        val toast = Toast.makeText(this, message,
-            Toast.LENGTH_SHORT)
-        toast.setGravity(Gravity.TOP, 0, 0)
-        toast.show()
-    }
+
     private fun reload() {
+        // Recargar la vista o realizar acciones cuando el usuario ya está autenticado
     }
+
+    private fun signIn(email: String, password: String) {
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    Log.d("Login", "signInWithEmail:success")
+                    showError("Inicio de sesión exitoso")
+
+                    // Redirige a HomeActivity después de un inicio de sesión exitoso
+                    val intent = Intent(this, HomeActivity::class.java)
+                    startActivity(intent)
+                    finish() // Finaliza la actividad actual para evitar volver a ella con el botón de retroceso
+                } else {
+                    Log.w("Login", "signInWithEmail:failure", task.exception)
+                    showError("Error al iniciar sesión")
+                }
+            }
+    }
+
+
     private fun signUp(email: String, password: String) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
-                    showError("Authentication Successfull.")
+                    showError("Registro exitoso")
                     reload()
                 } else {
-                    showError("Authentication failed.")
+                    showError("Error en el registro")
                 }
             }
+    }
+
+    // Función para mostrar un mensaje de error
+    private fun showError(message: String) {
+        val toast = Toast.makeText(this, message, Toast.LENGTH_SHORT)
+        toast.setGravity(Gravity.TOP, 0, 0)
+        toast.show()
     }
 }

@@ -27,14 +27,13 @@
         android:src="@drawable/ic_launcher_foreground"
         android:layout_marginBottom="32dp"/>
 
-    <!-- Campo para número de teléfono -->
+    <!-- Campo para correo -->
     <EditText
         android:id="@+id/user_email_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Correo"
-        android:inputType="text"
-        android:drawableLeft="@android:drawable/ic_menu_call"
+        android:inputType="textEmailAddress"
         android:drawablePadding="12dp"
         android:padding="14dp"
         android:background="@android:drawable/edit_text"
@@ -47,7 +46,6 @@
         android:layout_height="wrap_content"
         android:hint="Contraseña"
         android:inputType="textPassword"
-        android:drawableLeft="@android:drawable/ic_lock_idle_lock"
         android:drawablePadding="12dp"
         android:padding="14dp"
         android:background="@android:drawable/edit_text"
@@ -60,6 +58,18 @@
         android:layout_height="wrap_content"
         android:text="Iniciar sesión"
         android:backgroundTint="#25D366"
+        android:textColor="@android:color/white"
+        android:padding="14dp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Botón para registrarse -->
+    <Button
+        android:id="@+id/sign_up_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Registrarse"
+        android:backgroundTint="#FF5722"
         android:textColor="@android:color/white"
         android:padding="14dp"
         android:textStyle="bold"
